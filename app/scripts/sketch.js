@@ -8,11 +8,18 @@ let Point = require('./point');
 
 let config = {
   canvasWrapper: '.canvas-wrapper',
-  pointSpacing: 10,
-  maxRadius: 3
+  pointSpacing: 20,
+  maxRadius: 5
 };
 
 let pointList = [];
+
+function isMouseWithinSketch(sketch) {
+  return sketch.mouseX > 0 &&
+    sketch.mouseX < sketch.width &&
+    sketch.mouseY > 0 &&
+    sketch.mouseY < sketch.height;
+}
 
 function mySketch(s){
 
@@ -22,12 +29,13 @@ function mySketch(s){
     let $canvasWrapper = $(config.canvasWrapper);
     s.createCanvas(
       $canvasWrapper.innerWidth(),
-      $canvasWrapper.innerHeight(),
-      'p2d'
+      $canvasWrapper.innerHeight()
     ).parent($canvasWrapper[0]);
 
     // modes
     s.rectMode(s.RADIUS);
+    s.ellipseMode(s.RADIUS);
+    s.noStroke();
     s.fill(0);
 
     // Create a grid of points
@@ -47,16 +55,26 @@ function mySketch(s){
   };
 
   s.draw = function() {
+    if (! isMouseWithinSketch(s)) {
+      return;
+    }
+
     s.clear();
+
     for(let i = 0; i < pointList.length; i++) {
       let p = pointList[i];
       let d = p.distanceFromMouse();
+
       // radius varies inversely with distance
       let r = Math.min(200/d,config.maxRadius);
       p.setRadius(r);
-      p.render();
-    }
 
+      let color = Math.round((1-r/config.maxRadius)*255);
+      if (color <= 255) {
+        s.fill(color);
+        p.render();
+      }
+    }
   };
 
   s.windowResized = function() {
@@ -69,6 +87,7 @@ function mySketch(s){
     s.resizeCanvas(w,h-3);
 
   };
+
 }
 
 function init() {

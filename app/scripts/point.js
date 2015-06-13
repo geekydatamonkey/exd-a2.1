@@ -5,7 +5,7 @@
 class Point {
 
   constructor() {
-    this.shape = 'rect';
+    this.shape = 'ellipse';
     this.radius = 1;
     this.x = 0;
     this.y = 0;
@@ -33,6 +33,9 @@ class Point {
   }
 
   render() {
+    if (this.radius < 0.5) {
+      return;
+    }
     let fn = this.shape;
     this.sketch[fn](this.x, this.y, this.radius, this.radius);
   }
