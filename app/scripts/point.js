@@ -11,9 +11,7 @@ class Point {
     this.y = 0;
     this.sketch = null;
     this.rippleStartTime = 0;
-    this.rippleLength = 1000000;
-    this.click = null;
-    this.maxRadius = 20;
+    this.rippleLength = 10000;
   }
 
   setSketch(sketch) {
@@ -43,12 +41,8 @@ class Point {
     return d;
   }
 
-  beginRippling(clickX,clickY) {
+  beginRippling() {
     this.rippleStartTime = (new Date()).getTime();
-    this.click = {
-      x: clickX,
-      y: clickY
-    };
   }
 
   getRadius() {
@@ -71,13 +65,9 @@ class Point {
     let π = Math.PI;
 
     // damped wave equation
-    let d = Math.max(this.distanceFrom(this.click.x, this.click.y), 1);
     let scaleFactor = Math.exp(-1*t/(π * 1000))*Math.cos(π*t/1000) + 1;
-    
-    let r = Math.max(scaleFactor*200/d,1);
-    console.log(r);
-    this.radius = r;
-    return this.radius;
+    let r = this.radius * scaleFactor;
+    return r;
   }
 
   render() {
