@@ -70,10 +70,8 @@ function mySketch(s){
       p.setRadius(r);
 
       let color = Math.round((1-r/config.maxRadius)*255);
-      if (color <= 255) {
-        s.fill(color);
-        p.render();
-      }
+      s.fill(color);
+      p.render();
     }
   };
 
