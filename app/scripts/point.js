@@ -9,6 +9,11 @@ class Point {
     this.radius = 1;
     this.x = 0;
     this.y = 0;
+    this.sketch = null;
+  }
+
+  setSketch(sketch) {
+    this.sketch = sketch;
   }
 
   setPosition(x,y) {
@@ -16,9 +21,20 @@ class Point {
     this.y = y;
   }
 
-  render(sketch) {
+  setRadius(r) {
+    this.radius = r;
+  }
+
+  distanceFromMouse() {
+    let dx = this.x - this.sketch.mouseX;
+    let dy = this.y - this.sketch.mouseY;
+    let d = Math.sqrt(dx*dx + dy*dy);
+    return d;
+  }
+
+  render() {
     let fn = this.shape;
-    sketch[fn](this.x, this.y, this.radius, this.radius);
+    this.sketch[fn](this.x, this.y, this.radius, this.radius);
   }
 
 }
