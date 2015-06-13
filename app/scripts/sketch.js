@@ -8,8 +8,8 @@ let Point = require('./point');
 
 let config = {
   canvasWrapper: '.canvas-wrapper',
-  pointSpacing: 20,
-  maxRadius: 5
+  pointSpacing: 40,
+  maxRadius: 20
 };
 
 let pointList = [];
@@ -63,14 +63,6 @@ function mySketch(s){
 
     for(let i = 0; i < pointList.length; i++) {
       let p = pointList[i];
-      let d = p.distanceFromMouse();
-
-      // radius varies inversely with distance
-      let r = Math.min(200/d,config.maxRadius);
-      p.setRadius(r);
-
-      let color = Math.round((1-r/config.maxRadius)*255);
-      s.fill(color);
       p.render();
     }
   };
@@ -86,7 +78,15 @@ function mySketch(s){
 
   };
 
+  s.mousePressed = function() {
+    for (var i = 0, len = pointList.length; i < len; i++) {
+      pointList[i].beginRippling(s.mouseX,s.mouseY);
+    }
+  };
+
 }
+
+
 
 function init() {
   return new p5(mySketch);
